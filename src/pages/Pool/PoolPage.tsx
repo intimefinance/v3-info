@@ -27,8 +27,8 @@ import DensityChart from 'components/DensityChart'
 import { MonoSpace } from 'components/shared'
 import { useActiveNetworkVersion } from 'state/application/hooks'
 import { networkPrefix } from 'utils/networkPrefix'
-import { EthereumNetworkInfo } from 'constants/networks'
-import { GenericImageWrapper } from 'components/Logo'
+// import { GenericImageWrapper } from 'components/Logo'
+import { SWAP_APP_LINK } from 'constants/index'
 
 const ContentLayout = styled.div`
   display: grid;
@@ -41,9 +41,9 @@ const ContentLayout = styled.div`
   }
 `
 
+// border-radius: 10px;
 const TokenButton = styled(GreyCard)`
   padding: 8px 12px;
-  border-radius: 10px;
   :hover {
     cursor: pointer;
     opacity: 0.6;
@@ -158,7 +158,7 @@ export default function PoolPage({
             </AutoRow>
             <RowFixed gap="10px" align="center">
               <SavedIcon fill={savedPools.includes(address)} onClick={() => addSavedPool(address)} />
-              <StyledExternalLink href={getEtherscanLink(1, address, 'address', activeNetwork)}>
+              <StyledExternalLink href={getEtherscanLink(address, 'address', activeNetwork)}>
                 <ExternalLink stroke={theme.text2} size={'17px'} style={{ marginLeft: '12px' }} />
               </StyledExternalLink>
             </RowFixed>
@@ -173,9 +173,7 @@ export default function PoolPage({
                   fontSize="24px"
                 >{` ${poolData.token0.symbol} / ${poolData.token1.symbol} `}</TYPE.label>
                 <GreyBadge>{feeTierPercent(poolData.feeTier)}</GreyBadge>
-                {activeNetwork === EthereumNetworkInfo ? null : (
-                  <GenericImageWrapper src={activeNetwork.imageURL} style={{ marginLeft: '8px' }} size={'26px'} />
-                )}
+                {/* <GenericImageWrapper src={activeNetwork.imageURL} style={{ marginLeft: '8px' }} size={'26px'} /> */}
               </RowFixed>
               <ResponsiveRow>
                 <StyledInternalLink to={networkPrefix(activeNetwork) + 'tokens/' + poolData.token0.address}>
@@ -204,27 +202,25 @@ export default function PoolPage({
                 </StyledInternalLink>
               </ResponsiveRow>
             </AutoColumn>
-            {activeNetwork !== EthereumNetworkInfo ? null : (
-              <RowFixed>
-                <StyledExternalLink
-                  href={`https://app.uniswap.org/#/add/${poolData.token0.address}/${poolData.token1.address}/${poolData.feeTier}`}
-                >
-                  <ButtonGray width="170px" mr="12px" style={{ height: '44px' }}>
-                    <RowBetween>
-                      <Download size={24} />
-                      <div style={{ display: 'flex', alignItems: 'center' }}>Add Liquidity</div>
-                    </RowBetween>
-                  </ButtonGray>
-                </StyledExternalLink>
-                <StyledExternalLink
-                  href={`https://app.uniswap.org/#/swap?inputCurrency=${poolData.token0.address}&outputCurrency=${poolData.token1.address}`}
-                >
-                  <ButtonPrimary width="100px" style={{ height: '44px' }}>
-                    Trade
-                  </ButtonPrimary>
-                </StyledExternalLink>
-              </RowFixed>
-            )}
+            <RowFixed>
+              <StyledExternalLink
+                href={`${SWAP_APP_LINK}/#/add/${poolData.token0.address}/${poolData.token1.address}/${poolData.feeTier}`}
+              >
+                <ButtonGray width="170px" mr="12px" style={{ height: '44px' }}>
+                  <RowBetween>
+                    <Download size={24} />
+                    <div style={{ display: 'flex', alignItems: 'center' }}>Add Liquidity</div>
+                  </RowBetween>
+                </ButtonGray>
+              </StyledExternalLink>
+              <StyledExternalLink
+                href={`${SWAP_APP_LINK}/#/swap?inputCurrency=${poolData.token0.address}&outputCurrency=${poolData.token1.address}`}
+              >
+                <ButtonPrimary width="100px" style={{ height: '44px' }}>
+                  Trade
+                </ButtonPrimary>
+              </StyledExternalLink>
+            </RowFixed>
           </ResponsiveRow>
           <ContentLayout>
             <DarkGreyCard>

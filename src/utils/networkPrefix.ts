@@ -1,8 +1,8 @@
-import { EthereumNetworkInfo, NetworkInfo } from 'constants/networks'
+import { CoreNetworkInfo, NetworkInfo } from 'constants/networks'
 
 export function networkPrefix(activeNewtork: NetworkInfo) {
-  const isEthereum = activeNewtork === EthereumNetworkInfo
-  if (isEthereum) {
+  const isCore = activeNewtork === CoreNetworkInfo
+  if (isCore) {
     return '/'
   }
   const prefix = '/' + activeNewtork.route.toLocaleLowerCase() + '/'

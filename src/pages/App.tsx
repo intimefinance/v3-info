@@ -1,9 +1,9 @@
 import React, { Suspense, useState, useEffect } from 'react'
 import { Route, Switch, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
-import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
+// import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsReporter'
 import Header from '../components/Header'
-import URLWarning from '../components/Header/URLWarning'
+// import URLWarning from '../components/Header/URLWarning'
 import Popups from '../components/Popups'
 import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
 import Home from './Home'
@@ -16,7 +16,7 @@ import PoolPage from './Pool/PoolPage'
 import { ExternalLink, TYPE } from 'theme'
 import { useActiveNetworkVersion, useSubgraphStatus } from 'state/application/hooks'
 import { DarkGreyCard } from 'components/Card'
-import { SUPPORTED_NETWORK_VERSIONS, EthereumNetworkInfo, OptimismNetworkInfo } from 'constants/networks'
+import { SUPPORTED_NETWORK_VERSIONS, CoreNetworkInfo } from 'constants/networks'
 
 const AppWrapper = styled.div`
   display: flex;
@@ -82,7 +82,7 @@ const WarningBanner = styled.div`
   font-weight: 500;
 `
 
-const BLOCK_DIFFERENCE_THRESHOLD = 30
+// const BLOCK_DIFFERENCE_THRESHOLD = 30
 
 export default function App() {
   // pretend load buffer
@@ -97,7 +97,7 @@ export default function App() {
   const [activeNetwork, setActiveNetwork] = useActiveNetworkVersion()
   useEffect(() => {
     if (location.pathname === '/') {
-      setActiveNetwork(EthereumNetworkInfo)
+      setActiveNetwork(CoreNetworkInfo)
     } else {
       SUPPORTED_NETWORK_VERSIONS.map((n) => {
         if (location.pathname.includes(n.route.toLocaleLowerCase())) {
@@ -105,25 +105,32 @@ export default function App() {
         }
       })
     }
+    SUPPORTED_NETWORK_VERSIONS.map((n) => {
+      if (location.pathname.includes(n.route.toLocaleLowerCase())) {
+        setActiveNetwork(n)
+      }
+    })
   }, [location.pathname, setActiveNetwork])
 
   // subgraph health
   const [subgraphStatus] = useSubgraphStatus()
+  const subgraphUrl = activeNetwork === CoreNetworkInfo ? '' : 'https://thegraph.test.btcs.network/subgraphs/name/uni8'
 
-  const showNotSyncedWarning =
-    subgraphStatus.headBlock && subgraphStatus.syncedBlock && activeNetwork === OptimismNetworkInfo
-      ? subgraphStatus.headBlock - subgraphStatus.syncedBlock > BLOCK_DIFFERENCE_THRESHOLD
-      : false
+  // const showNotSyncedWarning =
+  //   subgraphStatus.headBlock && subgraphStatus.syncedBlock && activeNetwork === OptimismNetworkInfo
+  //     ? subgraphStatus.headBlock - subgraphStatus.syncedBlock > BLOCK_DIFFERENCE_THRESHOLD
+  //     : false
+  const showNotSyncedWarning = false
 
   return (
     <Suspense fallback={null}>
-      <Route component={GoogleAnalyticsReporter} />
+      {/* <Route component={GoogleAnalyticsReporter} /> */}
       <Route component={DarkModeQueryParamReader} />
       {loading ? (
         <LocalLoader fill={true} />
       ) : (
         <AppWrapper>
-          <URLWarning />
+          {/* <URLWarning /> */}
           <HeaderWrapper>
             {showNotSyncedWarning && (
               <WarningWrapper>
@@ -144,10 +151,7 @@ export default function App() {
                 <DarkGreyCard style={{ maxWidth: '340px' }}>
                   <TYPE.label>
                     The Graph hosted network which provides data for this site is temporarily experiencing issues. Check
-                    current status{' '}
-                    <ExternalLink href="https://thegraph.com/hosted-service/subgraph/uniswap/uniswap-v3">
-                      here.
-                    </ExternalLink>
+                    current status <ExternalLink href={subgraphUrl}>here.</ExternalLink>
                   </TYPE.label>
                 </DarkGreyCard>
               </BodyWrapper>

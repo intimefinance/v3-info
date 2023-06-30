@@ -49,25 +49,21 @@ export function useWETHContract(withSignerIfPossible?: boolean): Contract | null
 
 export function useArgentWalletDetectorContract(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(
-    chainId === SupportedChainId.MAINNET ? ARGENT_WALLET_DETECTOR_MAINNET_ADDRESS : undefined,
-    ARGENT_WALLET_DETECTOR_ABI,
-    false
-  )
+  return useContract(undefined, ARGENT_WALLET_DETECTOR_ABI, false)
 }
 
 export function useENSRegistrarContract(withSignerIfPossible?: boolean): Contract | null {
   const { chainId } = useActiveWeb3React()
   let address: string | undefined
-  if (chainId) {
-    switch (chainId) {
-      case SupportedChainId.MAINNET:
-      case SupportedChainId.ROPSTEN:
-      case SupportedChainId.RINKEBY:
-        address = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
-        break
-    }
-  }
+  // if (chainId) {
+  //   switch (chainId) {
+  //     case SupportedChainId.MAINNET:
+  //     case SupportedChainId.ROPSTEN:
+  //     case SupportedChainId.RINKEBY:
+  //       address = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'
+  //       break
+  //   }
+  // }
   return useContract(address, ENS_ABI, withSignerIfPossible)
 }
 
@@ -90,9 +86,5 @@ export function useMulticallContract(): Contract | null {
 
 export function useSocksController(): Contract | null {
   const { chainId } = useActiveWeb3React()
-  return useContract(
-    chainId === SupportedChainId.MAINNET ? '0x65770b5283117639760beA3F867b69b3697a91dd' : undefined,
-    UNISOCKS_ABI,
-    false
-  )
+  return useContract(undefined, UNISOCKS_ABI, false)
 }

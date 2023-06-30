@@ -9,7 +9,7 @@ import {
 } from 'state/tokens/hooks'
 import styled from 'styled-components'
 import { useColor } from 'hooks/useColor'
-import ReactGA from 'react-ga'
+// import ReactGA from 'react-ga'
 import { ThemedBackground, PageWrapper } from 'pages/styled'
 import { shortenAddress, getEtherscanLink, currentTimestamp } from 'utils'
 import { AutoColumn } from 'components/Column'
@@ -33,16 +33,16 @@ import BarChart from 'components/BarChart/alt'
 import CandleChart from 'components/CandleChart'
 import TransactionTable from 'components/TransactionsTable'
 import { useSavedTokens } from 'state/user/hooks'
+import { SWAP_APP_LINK } from 'constants/index'
 import { ONE_HOUR_SECONDS, TimeWindow } from 'constants/intervals'
 import { MonoSpace } from 'components/shared'
 import dayjs from 'dayjs'
 import { useActiveNetworkVersion } from 'state/application/hooks'
 import { networkPrefix } from 'utils/networkPrefix'
-import { EthereumNetworkInfo } from 'constants/networks'
-import { GenericImageWrapper } from 'components/Logo'
+// import { GenericImageWrapper } from 'components/Logo'
 // import { SmallOptionButton } from '../../components/Button'
-import { useCMCLink } from 'hooks/useCMCLink'
-import CMCLogo from '../../assets/images/cmc.png'
+// import { useCMCLink } from 'hooks/useCMCLink'
+// import CMCLogo from '../../assets/images/cmc.png'
 
 const PriceText = styled(TYPE.label)`
   font-size: 36px;
@@ -70,12 +70,12 @@ const ResponsiveRow = styled(RowBetween)`
   `};
 `
 
-const StyledCMCLogo = styled.img`
-  height: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+// const StyledCMCLogo = styled.img`
+//   height: 16px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+// `
 
 enum ChartView {
   TVL,
@@ -94,7 +94,7 @@ export default function TokenPage({
 
   address = address.toLowerCase()
   // theming
-  const backgroundColor = useColor(address)
+  const backgroundColor = useColor(address, activeNetwork.chainId)
   const theme = useTheme()
 
   // scroll on page view
@@ -109,7 +109,7 @@ export default function TokenPage({
   const chartData = useTokenChartData(address)
 
   // check for link to CMC
-  const cmcLink = useCMCLink(address)
+  // const cmcLink = useCMCLink(address)
 
   // format for chart component
   const formattedTvlData = useMemo(() => {
@@ -172,7 +172,7 @@ export default function TokenPage({
         !tokenData.exists ? (
           <LightGreyCard style={{ textAlign: 'center' }}>
             No pool has been created with this token yet. Create one
-            <StyledExternalLink style={{ marginLeft: '4px' }} href={`https://app.uniswap.org/#/add/${address}`}>
+            <StyledExternalLink style={{ marginLeft: '4px' }} href={`${SWAP_APP_LINK}/#/add/${address}`}>
               here.
             </StyledExternalLink>
           </LightGreyCard>
@@ -189,27 +189,27 @@ export default function TokenPage({
                   </StyledInternalLink>
                   <TYPE.main>{` > `}</TYPE.main>
                   <TYPE.label>{` ${tokenData.symbol} `}</TYPE.label>
-                  <StyledExternalLink href={getEtherscanLink(1, address, 'address', activeNetwork)}>
+                  <StyledExternalLink href={getEtherscanLink(address, 'address', activeNetwork)}>
                     <TYPE.main>{` (${shortenAddress(address)}) `}</TYPE.main>
                   </StyledExternalLink>
                 </AutoRow>
                 <RowFixed align="center" justify="center">
                   <SavedIcon fill={savedTokens.includes(address)} onClick={() => addSavedToken(address)} />
-                  {cmcLink && (
+                  {/* {cmcLink && (
                     <StyledExternalLink
                       href={cmcLink}
                       style={{ marginLeft: '12px' }}
                       onClickCapture={() => {
-                        ReactGA.event({
-                          category: 'CMC',
-                          action: 'CMC token page click',
-                        })
+                        // ReactGA.event({
+                        //   category: 'CMC',
+                        //   action: 'CMC token page click',
+                        // })
                       }}
                     >
                       <StyledCMCLogo src={CMCLogo} />
                     </StyledExternalLink>
-                  )}
-                  <StyledExternalLink href={getEtherscanLink(1, address, 'address', activeNetwork)}>
+                  )} */}
+                  <StyledExternalLink href={getEtherscanLink(address, 'address', activeNetwork)}>
                     <ExternalLink stroke={theme.text2} size={'17px'} style={{ marginLeft: '12px' }} />
                   </StyledExternalLink>
                 </RowFixed>
@@ -224,32 +224,28 @@ export default function TokenPage({
                     <TYPE.main ml={'6px'} fontSize="20px">
                       ({tokenData.symbol})
                     </TYPE.main>
-                    {activeNetwork === EthereumNetworkInfo ? null : (
-                      <GenericImageWrapper src={activeNetwork.imageURL} style={{ marginLeft: '8px' }} size={'26px'} />
-                    )}
+                    {/* <GenericImageWrapper src={activeNetwork.imageURL} style={{ marginLeft: '8px' }} size={'26px'} /> */}
                   </RowFixed>
                   <RowFlat style={{ marginTop: '8px' }}>
                     <PriceText mr="10px"> {formatDollarAmount(tokenData.priceUSD)}</PriceText>
                     (<Percent value={tokenData.priceUSDChange} />)
                   </RowFlat>
                 </AutoColumn>
-                {activeNetwork !== EthereumNetworkInfo ? null : (
-                  <RowFixed>
-                    <StyledExternalLink href={`https://app.uniswap.org/#/add/${address}`}>
-                      <ButtonGray width="170px" mr="12px" height={'100%'} style={{ height: '44px' }}>
-                        <RowBetween>
-                          <Download size={24} />
-                          <div style={{ display: 'flex', alignItems: 'center' }}>Add Liquidity</div>
-                        </RowBetween>
-                      </ButtonGray>
-                    </StyledExternalLink>
-                    <StyledExternalLink href={`https://app.uniswap.org/#/swap?inputCurrency=${address}`}>
-                      <ButtonPrimary width="100px" bgColor={backgroundColor} style={{ height: '44px' }}>
-                        Trade
-                      </ButtonPrimary>
-                    </StyledExternalLink>
-                  </RowFixed>
-                )}
+                <RowFixed>
+                  <StyledExternalLink href={`${SWAP_APP_LINK}/#/add/${address}`}>
+                    <ButtonGray width="170px" mr="12px" height={'100%'} style={{ height: '44px' }}>
+                      <RowBetween>
+                        <Download size={24} />
+                        <div style={{ display: 'flex', alignItems: 'center' }}>Add Liquidity</div>
+                      </RowBetween>
+                    </ButtonGray>
+                  </StyledExternalLink>
+                  <StyledExternalLink href={`${SWAP_APP_LINK}/#/swap?inputCurrency=${address}`}>
+                    <ButtonPrimary width="100px" bgColor={backgroundColor} style={{ height: '44px' }}>
+                      Trade
+                    </ButtonPrimary>
+                  </StyledExternalLink>
+                </RowFixed>
               </ResponsiveRow>
             </AutoColumn>
             <ContentLayout>

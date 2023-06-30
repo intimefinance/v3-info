@@ -4,17 +4,9 @@ import { AddressZero } from '@ethersproject/constants'
 import { Contract } from '@ethersproject/contracts'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { Currency, CurrencyAmount, Fraction, Percent, Token } from '@uniswap/sdk-core'
-import { SupportedChainId } from 'constants/chains'
-import {
-  ArbitrumNetworkInfo,
-  BNBNetworkInfo,
-  CeloNetworkInfo,
-  NetworkInfo,
-  PolygonNetworkInfo,
-} from 'constants/networks'
+import { NetworkInfo, CoreNetworkInfo } from 'constants/networks'
 import JSBI from 'jsbi'
 import { TokenAddressMap } from '../state/lists/hooks'
-import { OptimismNetworkInfo } from '../constants/networks'
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -25,70 +17,12 @@ export function isAddress(value: any): string | false {
   }
 }
 
-const ETHERSCAN_PREFIXES: { [chainId: number]: string } = {
-  [SupportedChainId.MAINNET]: '',
-  [SupportedChainId.ROPSTEN]: 'ropsten.',
-  [SupportedChainId.RINKEBY]: 'rinkeby.',
-  [SupportedChainId.GOERLI]: 'goerli.',
-  [SupportedChainId.KOVAN]: 'kovan.',
-  [SupportedChainId.OPTIMISM]: 'optimistic.',
-  [SupportedChainId.OPTIMISTIC_KOVAN]: 'kovan-optimistic.',
-}
-
 export function getEtherscanLink(
-  chainId: number,
   data: string,
   type: 'transaction' | 'token' | 'address' | 'block',
   networkVersion: NetworkInfo
 ): string {
-  const prefix =
-    networkVersion === BNBNetworkInfo
-      ? 'https://bscscan.com/'
-      : networkVersion === PolygonNetworkInfo
-      ? 'https://polygonscan.com/'
-      : networkVersion === CeloNetworkInfo
-      ? 'https://celoscan.io/'
-      : networkVersion === ArbitrumNetworkInfo
-      ? 'https://arbiscan.io/'
-      : networkVersion === OptimismNetworkInfo
-      ? 'https://optimistic.etherscan.io'
-      : `https://${ETHERSCAN_PREFIXES[chainId] || ETHERSCAN_PREFIXES[1]}etherscan.io`
-
-  if (networkVersion === OptimismNetworkInfo) {
-    switch (type) {
-      case 'transaction': {
-        return `${prefix}/tx/${data}`
-      }
-      case 'token': {
-        return `${prefix}/address/${data}`
-      }
-      case 'block': {
-        return `https://optimistic.etherscan.io`
-      }
-      case 'address':
-      default: {
-        return `${prefix}/address/${data}`
-      }
-    }
-  }
-
-  if (networkVersion === ArbitrumNetworkInfo) {
-    switch (type) {
-      case 'transaction': {
-        return `${prefix}/tx/${data}`
-      }
-      case 'token': {
-        return `${prefix}/address/${data}`
-      }
-      case 'block': {
-        return 'https://arbiscan.io/'
-      }
-      case 'address':
-      default: {
-        return `${prefix}/address/${data}`
-      }
-    }
-  }
+  const prefix = networkVersion === CoreNetworkInfo ? 'https://scan.coredao.org' : 'https://scan.test.btcs.network'
 
   switch (type) {
     case 'transaction': {

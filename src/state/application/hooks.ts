@@ -1,18 +1,5 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client'
-import {
-  arbitrumBlockClient,
-  arbitrumClient,
-  blockClient,
-  client,
-  optimismClient,
-  optimismBlockClient,
-  polygonBlockClient,
-  polygonClient,
-  celoClient,
-  celoBlockClient,
-  bscClient,
-  bscBlockClient,
-} from 'apollo/client'
+import { coreTestHealthClient, coreTestBlockClient, coreTestClient } from 'apollo/client'
 import { NetworkInfo, SupportedNetwork } from 'constants/networks'
 import { useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -130,20 +117,10 @@ export function useActiveNetworkVersion(): [NetworkInfo, (activeNetworkVersion: 
 export function useDataClient(): ApolloClient<NormalizedCacheObject> {
   const [activeNetwork] = useActiveNetworkVersion()
   switch (activeNetwork.id) {
-    case SupportedNetwork.ETHEREUM:
-      return client
-    case SupportedNetwork.ARBITRUM:
-      return arbitrumClient
-    case SupportedNetwork.OPTIMISM:
-      return optimismClient
-    case SupportedNetwork.POLYGON:
-      return polygonClient
-    case SupportedNetwork.CELO:
-      return celoClient
-    case SupportedNetwork.BNB:
-      return bscClient
+    case SupportedNetwork.CORE_TEST:
+      return coreTestClient
     default:
-      return client
+      return coreTestClient
   }
 }
 
@@ -151,20 +128,30 @@ export function useDataClient(): ApolloClient<NormalizedCacheObject> {
 export function useBlockClient(): ApolloClient<NormalizedCacheObject> {
   const [activeNetwork] = useActiveNetworkVersion()
   switch (activeNetwork.id) {
-    case SupportedNetwork.ETHEREUM:
-      return blockClient
-    case SupportedNetwork.ARBITRUM:
-      return arbitrumBlockClient
-    case SupportedNetwork.OPTIMISM:
-      return optimismBlockClient
-    case SupportedNetwork.POLYGON:
-      return polygonBlockClient
-    case SupportedNetwork.CELO:
-      return celoBlockClient
-    case SupportedNetwork.BNB:
-      return bscBlockClient
+    case SupportedNetwork.CORE_TEST:
+      return coreTestBlockClient
     default:
-      return blockClient
+      return coreTestBlockClient
+  }
+}
+
+export function useHealthClient(): ApolloClient<NormalizedCacheObject> {
+  const [activeNetwork] = useActiveNetworkVersion()
+  switch (activeNetwork.id) {
+    case SupportedNetwork.CORE_TEST:
+      return coreTestHealthClient
+    default:
+      return coreTestHealthClient
+  }
+}
+
+export function useDataSubgraphName(): string {
+  const [activeNetwork] = useActiveNetworkVersion()
+  switch (activeNetwork.id) {
+    case SupportedNetwork.CORE_TEST:
+      return 'uni8'
+    default:
+      return 'uni8'
   }
 }
 

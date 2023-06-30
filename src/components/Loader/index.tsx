@@ -95,6 +95,7 @@ const loadingAnimation = keyframes`
   }
 `
 
+// border-radius: 12px;
 export const LoadingRows = styled.div`
   display: grid;
   min-width: 75%;
@@ -112,7 +113,6 @@ export const LoadingRows = styled.div`
       ${({ theme }) => theme.bg1} 75%
     );
     background-size: 400%;
-    border-radius: 12px;
     height: 2.4em;
     will-change: background-position;
   }

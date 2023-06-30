@@ -5,14 +5,10 @@ import { hex } from 'wcag-contrast'
 import { Token } from '@uniswap/sdk-core'
 import uriToHttp from 'utils/uriToHttp'
 import { isAddress } from 'utils'
-import { SupportedChainId } from 'constants/chains'
+import { getTokenLogoURL } from '../constants/lists'
 
 async function getColorFromToken(token: Token): Promise<string | null> {
-  if (token.chainId === SupportedChainId.RINKEBY && token.address === '0xc7AD46e0b8a400Bb3C915120d284AafbA8fc4735') {
-    return Promise.resolve('#FAAB14')
-  }
-
-  const path = `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${token.address}/logo.png`
+  const path = getTokenLogoURL({ address: token.address, chainId: token.chainId })
 
   return Vibrant.from(path)
     .getPalette()
@@ -45,14 +41,14 @@ async function getColorFromUriPath(uri: string): Promise<string | null> {
     .catch(() => null)
 }
 
-export function useColor(address?: string) {
+export function useColor(address?: string, chainId?: number) {
   const [color, setColor] = useState('#2172E5')
 
   const formattedAddress = isAddress(address)
 
   const token = useMemo(() => {
-    return formattedAddress ? new Token(1, formattedAddress, 0) : undefined
-  }, [formattedAddress])
+    return formattedAddress && chainId ? new Token(chainId, formattedAddress, 0) : undefined
+  }, [formattedAddress, chainId])
 
   useLayoutEffect(() => {
     let stale = false

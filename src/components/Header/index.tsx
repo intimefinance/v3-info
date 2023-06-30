@@ -2,8 +2,8 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { darken } from 'polished'
 import styled from 'styled-components'
-import LogoDark from '../../assets/svg/logo_white.svg'
-import Menu from '../Menu'
+import LogoDark from '../../assets/images/intime-logo.png'
+// import Menu from '../Menu'
 import Row, { RowFixed, RowBetween } from '../Row'
 import SearchSmall from 'components/Search'
 import NetworkDropdown from 'components/Menu/NetworkDropdown'
@@ -80,6 +80,7 @@ const Title = styled(NavLink)`
 `
 
 const UniIcon = styled.div`
+  height: 25px;
   transition: transform 0.3s ease;
   :hover {
     transform: rotate(-5deg);
@@ -93,7 +94,6 @@ const StyledNavLink = styled(NavLink).attrs({
 })`
   ${({ theme }) => theme.flexRowNoWrap}
   align-items: left;
-  border-radius: 3rem;
   outline: none;
   cursor: pointer;
   text-decoration: none;
@@ -105,7 +105,6 @@ const StyledNavLink = styled(NavLink).attrs({
   font-weight: 500;
 
   &.${activeClassName} {
-    border-radius: 12px;
     background-color: ${({ theme }) => theme.bg2};
     color: ${({ theme }) => theme.text1};
   }
@@ -116,6 +115,7 @@ const StyledNavLink = styled(NavLink).attrs({
   }
 `
 
+// border-radius: 0.5rem;
 export const StyledMenuButton = styled.button`
   position: relative;
   width: 100%;
@@ -128,7 +128,6 @@ export const StyledMenuButton = styled.button`
   background-color: ${({ theme }) => theme.bg3};
   margin-left: 8px;
   padding: 0.15rem 0.5rem;
-  border-radius: 0.5rem;
 
   :hover,
   :focus {
@@ -162,7 +161,7 @@ export default function Header() {
       <HeaderRow>
         <Title to={networkPrefix(activeNewtork)}>
           <UniIcon>
-            <img width={'24px'} src={LogoDark} alt="logo" />
+            <img width={'64px'} src={LogoDark} alt="logo" />
           </UniIcon>
         </Title>
         <HeaderLinks>
@@ -184,13 +183,13 @@ export default function Header() {
       <HeaderControls>
         <NetworkDropdown />
         <SearchSmall />
-        <Menu />
+        {/* <Menu /> */}
       </HeaderControls>
       <SmallContentGrouping>
         <AutoColumn gap="sm">
           <RowBetween>
             <NetworkDropdown />
-            <Menu />
+            {/* <Menu /> */}
           </RowBetween>
           <SearchSmall />
         </AutoColumn>

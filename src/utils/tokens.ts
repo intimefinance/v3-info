@@ -1,6 +1,6 @@
 import { Token } from '@uniswap/sdk-core'
-import { CeloNetworkInfo, NetworkInfo, PolygonNetworkInfo } from 'constants/networks'
-import { CELO_ADDRESS, MATIC_ADDRESS, WETH_ADDRESSES } from '../constants'
+import { NetworkInfo, CoreTestNetworkInfo } from 'constants/networks'
+import { CORE_TEST_WCORE_ADDRESS, WETH_ADDRESSES } from '../constants'
 
 export interface SerializedToken {
   chainId: number
@@ -21,35 +21,25 @@ export function serializeToken(token: Token): SerializedToken {
 }
 
 export function formatTokenSymbol(address: string, symbol: string, activeNetwork?: NetworkInfo) {
-  // dumb catch for matic
-  if (address === MATIC_ADDRESS && activeNetwork === PolygonNetworkInfo) {
-    return 'MATIC'
-  }
-
-  // dumb catch for Celo
-  if (address === CELO_ADDRESS && activeNetwork === CeloNetworkInfo) {
-    return 'CELO'
+  // dumb catch for test WCORE
+  if (address === CORE_TEST_WCORE_ADDRESS && activeNetwork === CoreTestNetworkInfo) {
+    return 'WCORE'
   }
 
   if (WETH_ADDRESSES.includes(address)) {
-    return 'ETH'
+    return 'WCORE'
   }
   return symbol
 }
 
 export function formatTokenName(address: string, name: string, activeNetwork?: NetworkInfo) {
-  // dumb catch for matic
-  if (address === MATIC_ADDRESS && activeNetwork === PolygonNetworkInfo) {
-    return 'MATIC'
-  }
-
-  // dumb catch for Celo
-  if (address === CELO_ADDRESS && activeNetwork === CeloNetworkInfo) {
-    return 'CELO'
+  // dumb catch for test WCORE
+  if (address === CORE_TEST_WCORE_ADDRESS && activeNetwork === CoreTestNetworkInfo) {
+    return 'Wrapped CORE'
   }
 
   if (WETH_ADDRESSES.includes(address)) {
-    return 'Ether'
+    return 'Wrapped CORE'
   }
   return name
 }
