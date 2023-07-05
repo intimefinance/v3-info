@@ -1,7 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client'
 
 export const coreHealthClient = new ApolloClient({
-  uri: 'https://thegraph.test.btcs.network/index-node/graphql',
+  uri: 'https://thegraph-sub.test.btcs.network/graphql',
   cache: new InMemoryCache(),
 })
 
@@ -49,7 +49,7 @@ export const coreClient = new ApolloClient({
 })
 
 export const coreTestHealthClient = new ApolloClient({
-  uri: 'https://thegraph.test.btcs.network/index-node/graphql',
+  uri: 'https://thegraph-sub.test.btcs.network/graphql',
   cache: new InMemoryCache(),
 })
 
